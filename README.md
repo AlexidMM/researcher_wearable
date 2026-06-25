@@ -1,43 +1,51 @@
 # researcher_wearable
 
-App Flutter para el ecosistema Miracle Finder.
+App Flutter para investigadores (Wear OS / Android / Linux desktop para pruebas).
 
-## Modos de ejecución
+## Arquitectura
 
-- **Wear OS / Android (Práctica 7):** pantalla de login + lista de publicaciones con `SwitchListTile` para activar o cerrar misiones.
-- **Flutter Web (Práctica 8):** widget de estadísticas (`StatsWidget`) embebido en el dashboard React de `researcher-finder`.
+```
+PostgreSQL → miracle-api → researcher-finder   (web)
+PostgreSQL → miracle-api → researcher_wearable (solo lectura)
+```
 
-## Configuración
+La web y el wearable **no se conectan entre sí**. Ambos hablan con `miracle-api`.
 
-La URL de la API se define con `--dart-define`:
+## Cómo levantar (solo 2 terminales)
 
+**Terminal 1 — API**
+```bash
+cd miracle-api
+pnpm run start:dev
+```
+
+**Terminal 2 — Wearable**
+
+En **Linux desktop** (tu caso):
+```bash
+cd researcher_wearable
+flutter run -d linux --dart-define=API_URL=http://127.0.0.1:3000
+```
+
+En **emulador Android**:
 ```bash
 flutter run --dart-define=API_URL=http://10.0.2.2:3000
 ```
 
-Para un dispositivo físico usa la IP de tu máquina, por ejemplo `http://192.168.1.50:3000`.
+> No necesitas `flutter run -d web-server`. Ese servicio ya no se usa.
 
-## Wear OS / Android
+## Migración de notificaciones
 
-```bash
-cd researcher_wearable
-flutter pub get
-flutter run --dart-define=API_URL=http://10.0.2.2:3000
-```
-
-## Flutter Web (dashboard embebido)
+Si las alertas fallan, crea la tabla en PostgreSQL:
 
 ```bash
-cd researcher_wearable
-flutter pub get
-flutter run -d chrome --web-port=8080 --dart-define=API_URL=http://localhost:3000
+psql -U TU_USUARIO -d TU_BD -f miracle-api/migrations/add_notifications.sql
 ```
 
-Luego levanta `researcher-finder` con `VITE_FLUTTER_STATS_URL=http://localhost:8080` en `.env`.
-
-## Endpoints usados
+## Endpoints consumidos
 
 - `POST /auth/login`
 - `GET /publications/mine`
-- `PATCH /publications/:id/status`
-- `GET /publications/stats/mine`
+- `GET /notifications/mine`
+
+El wearable refresca cada **8 segundos** para mostrar cambios hechos desde la web.

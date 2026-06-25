@@ -72,11 +72,16 @@ class _LoginScreenState extends State<LoginScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             const Text(
-              'Interruptor de Misiones',
+              'Monitor de Misiones',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
-            const Text('Inicia sesión como investigador para gestionar tus publicaciones.'),
+            const Text('Consulta el estado de tus publicaciones y recibe alertas cuando cambien.'),
+            const SizedBox(height: 8),
+            Text(
+              'API: ${widget.apiService.baseUrl}',
+              style: const TextStyle(fontSize: 12, color: Colors.white54),
+            ),
             const SizedBox(height: 16),
             TextField(
               controller: _emailController,

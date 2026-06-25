@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../services/api_service.dart';
 import 'login_screen.dart';
-import 'missions_screen.dart';
+import 'wearable_home_screen.dart';
 
 class WearableApp extends StatefulWidget {
   const WearableApp({super.key});
@@ -48,7 +48,7 @@ class _WearableAppState extends State<WearableApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Interruptor de Misiones',
+      title: 'Monitor de Misiones',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         brightness: Brightness.dark,
@@ -61,7 +61,7 @@ class _WearableAppState extends State<WearableApp> {
       home: _checkingSession
           ? const Scaffold(body: Center(child: CircularProgressIndicator()))
           : _isLoggedIn
-              ? MissionsScreen(apiService: _apiService, onLogout: _handleLogout)
+              ? WearableHomeScreen(apiService: _apiService, onLogout: _handleLogout)
               : LoginScreen(apiService: _apiService, onLoginSuccess: _handleLoginSuccess),
     );
   }

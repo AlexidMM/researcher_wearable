@@ -1,10 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:researcher_wearable/main.dart';
+import 'package:researcher_wearable/ui/wearable/wearable_app.dart';
 
 void main() {
-  testWidgets('App root renders without crashing', (WidgetTester tester) async {
-    await tester.pumpWidget(const MiracleFlutterApp());
-    expect(find.byType(MiracleFlutterApp), findsOneWidget);
+  testWidgets('Wearable app root renders', (WidgetTester tester) async {
+    await tester.pumpWidget(const WearableApp());
+    expect(find.byType(WearableApp), findsOneWidget);
   });
 }
